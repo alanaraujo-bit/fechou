@@ -40,11 +40,12 @@ cd app && npx tsc --noEmit   # typecheck do app
 
 ## Onde paramos (2026-07-17)
 
-Fases 0 e 1 **concluídas e validadas no iPhone**; Fase 2 (Anúncios) **código pronto e testado
-na produção** (2026-07-17): fotos no R2 (bucket `fechou-fotos`, upload por URL assinada),
-feed por proximidade, busca com filtros, status Disponível/Reservado/Vendido.
+Fases 0, 1 e 2 **concluídas e validadas no iPhone** (2026-07-17): identidade (OTP + JWT),
+anúncios com fotos no R2 (bucket `fechou-fotos`, upload por URL assinada), feed por
+proximidade, busca com filtros, status Disponível/Reservado/Vendido.
 API: https://fechou-api-production-e265.up.railway.app (projeto Railway `fechou`).
 **Importante:** Alan não roda infra local — API, Postgres e R2 são os ambientes reais; o app aponta pra lá por padrão.
 **Atenção:** Resend em modo teste — OTP só chega no e-mail alanvitoraraujo2a@gmail.com;
 outros e-mails dão erro 500 até verificar um domínio no Resend.
-**Pendente:** Alan validar a Fase 2 no iPhone (anunciar item real e achar na busca por distância).
+Próximo passo de código: **Fase 3 — Negociação** (chat WebSocket, oferta estruturada com botão
+"Fechou!", transactions, agendamento). Detalhes no ROADMAP.

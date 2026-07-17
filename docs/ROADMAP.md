@@ -27,7 +27,7 @@ quando o critério foi cumprido de verdade no celular, não mockado.
 
 **Critério:** Alan cria a própria conta real e permanece logado após fechar o app. ← **✅ validado em 2026-07-17**
 
-## Fase 2 — Anúncios 🚧 (código pronto e testado na Railway em 2026-07-17; falta validação do Alan no iPhone)
+## Fase 2 — Anúncios ✅ (critério validado no iPhone em 2026-07-17 — bicicleta anunciada e encontrada na busca)
 - [x] CRUD de anúncio: fotos (upload direto pro R2 via URL assinada — bucket `fechou-fotos`, privado,
       leitura via URL assinada de 24h), título, preço, categoria, condição, localização aproximada
       (lat/lng arredondados pra ~1 km no app; nunca o endereço exato).
@@ -38,7 +38,7 @@ quando o critério foi cumprido de verdade no celular, não mockado.
 - Rotas: `POST /anuncios/fotos/url-upload`, `POST/GET /anuncios`, `GET /anuncios/meus`,
   `GET/PATCH/DELETE /anuncios/:id`. Telas: Anunciar, Início (feed), Buscar, detalhe (`/anuncio/[id]`).
 
-**Critério:** Alan anuncia um item de verdade pelo celular e o encontra pela busca com filtro de distância. ← **pendente, próximo passo**
+**Critério:** Alan anuncia um item de verdade pelo celular e o encontra pela busca com filtro de distância. ← **✅ validado em 2026-07-17**
 
 ## Fase 3 — Negociação
 - Chat em tempo real (WebSocket) entre comprador e vendedor por anúncio.
