@@ -40,12 +40,18 @@ cd app && npx tsc --noEmit   # typecheck do app
 
 ## Onde paramos (2026-07-17)
 
-Fases 0, 1 e 2 **concluídas e validadas no iPhone**; Fase 3 (Negociação) **código pronto e
-testado na produção** (2026-07-17): chat WebSocket, ofertas com "Fechou!"/recusar/contrapropor,
-transaction + Reservado automáticos, encontro no chat.
-API: https://fechou-api-production-e265.up.railway.app (projeto Railway `fechou`).
+**Fases 0 a 3 concluídas e validadas** (2026-07-17): identidade (OTP + JWT + refresh),
+anúncios com fotos no R2, feed por proximidade, busca com filtros, chat WebSocket,
+ofertas com "Fechou!", transactions e encontro no chat. Venda completa validada
+entre o iPhone (vendedor) e o Android (comprador) do Alan.
+API v0.4.x: https://fechou-api-production-e265.up.railway.app (projeto Railway `fechou`, serviço `fechou-api` + Postgres).
+Fotos: R2 `fechou-fotos` (conta Cloudflare 8ed7e13a…), credenciais nas variáveis da Railway.
 **Importante:** Alan não roda infra local — API, Postgres e R2 são os ambientes reais; o app aponta pra lá por padrão.
-**Atenção:** Resend em modo teste — OTP só chega no e-mail alanvitoraraujo2a@gmail.com;
-outros e-mails dão erro 500 até verificar um domínio no Resend. Pra segunda conta nos testes
-do Alan (Android), gerar o código direto no banco (hash sha256 em `otp_codes`).
-**Pendente:** Alan validar a Fase 3 (venda completa entre iPhone e Android, do anúncio ao "Fechou!").
+Migrações: `drizzle-kit push` da máquina do Alan usando a `DATABASE_PUBLIC_URL`
+(pegue com `railway variables --service Postgres`).
+**Atenção:** Resend em modo teste — OTP por e-mail só chega em alanvitoraraujo2a@gmail.com;
+pros outros o código cai nos logs (`railway logs --service fechou-api`). Liberar geral = verificar
+domínio no Resend e setar `EMAIL_FROM`.
+Contas de teste: teste@fechou.dev e teste2@fechou.dev (código: inserir hash sha256 em `otp_codes`).
+Próximo passo de código: **Fase 4 — Confiança** (avaliação bilateral pós-venda, denúncia,
+busca salva com push, dicas de encontro seguro). Detalhes no ROADMAP.
