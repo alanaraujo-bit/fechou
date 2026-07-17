@@ -55,6 +55,8 @@ async function chamarApi<T>(
 type AuthContextType = {
   usuario: Usuario | null;
   carregando: boolean;
+  /** Token de acesso da sessão (pra conexões WebSocket). */
+  accessToken: string | null;
   solicitarCodigo: (email: string) => Promise<void>;
   verificarCodigo: (email: string, codigo: string) => Promise<void>;
   atualizarPerfil: (dados: { nome?: string; cidade?: string }) => Promise<void>;
@@ -160,13 +162,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => ({
       usuario,
       carregando,
+      accessToken,
       solicitarCodigo,
       verificarCodigo,
       atualizarPerfil,
       sair,
       chamarComToken,
     }),
-    [usuario, carregando, solicitarCodigo, verificarCodigo, atualizarPerfil, sair, chamarComToken],
+    [usuario, carregando, accessToken, solicitarCodigo, verificarCodigo, atualizarPerfil, sair, chamarComToken],
   );
 
   return <AuthContext.Provider value={valor}>{children}</AuthContext.Provider>;

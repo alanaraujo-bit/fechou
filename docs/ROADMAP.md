@@ -40,13 +40,18 @@ quando o critério foi cumprido de verdade no celular, não mockado.
 
 **Critério:** Alan anuncia um item de verdade pelo celular e o encontra pela busca com filtro de distância. ← **✅ validado em 2026-07-17**
 
-## Fase 3 — Negociação
-- Chat em tempo real (WebSocket) entre comprador e vendedor por anúncio.
-- **Oferta estruturada**: propor valor → aceitar ("Fechou!") / recusar / contrapropor.
-- Oferta aceita → cria `transaction` + anúncio vira Reservado automaticamente.
-- Agendamento do encontro (data/hora/local) registrado no chat.
+## Fase 3 — Negociação 🚧 (código pronto e testado na Railway em 2026-07-17; falta validação do Alan nos dois celulares)
+- [x] Chat em tempo real (WebSocket em `/ws?token=JWT` no próprio Fastify) entre comprador e vendedor por anúncio.
+- [x] **Oferta estruturada**: propor valor → aceitar ("Fechou!") / recusar / contrapropor.
+      Nova oferta substitui a pendente; conversa com negócio fechado bloqueia novas ofertas.
+- [x] Oferta aceita → cria `transaction` (status `combinado`, pronta pro escrow da v2) + anúncio vira Reservado automaticamente.
+- [x] Agendamento do encontro (quando/local em texto livre) registrado no chat, com dica de segurança no formulário.
+- [x] E2e na produção: venda completa simulada entre duas contas, com eventos chegando pelo WebSocket.
+- Rotas: `POST/GET /conversas`, `GET/POST /conversas/:id/mensagens`, `POST /conversas/:id/ofertas`,
+  `POST /conversas/:id/ofertas/:ofertaId/responder`, `POST /conversas/:id/encontro`.
+  Telas: aba Chat (lista), `/conversa/[id]` (mensagens ao vivo, bolhas de oferta com botões), botão "Chamar no chat" no detalhe.
 
-**Critério:** venda completa simulada entre duas contas, do anúncio ao "Fechou!".
+**Critério:** venda completa simulada entre duas contas, do anúncio ao "Fechou!". ← **pendente validação do Alan (iPhone + Android)**
 
 ## Fase 4 — Confiança
 - Avaliação bilateral pós-venda (comprador ⭐ vendedor e vendedor ⭐ comprador).

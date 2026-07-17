@@ -5,6 +5,7 @@ import {
   pgTable,
   text,
   timestamp,
+  unique,
   uuid,
 } from "drizzle-orm/pg-core";
 
@@ -74,6 +75,110 @@ export const listingPhotos = pgTable("listing_photos", {
     .references(() => listings.id, { onDelete: "cascade" }),
   key: text("key").notNull(),
   position: integer("position").notNull().default(0),
+});
+
+export const tipoMensagem = pgEnum("message_type", [
+  "texto",
+  "oferta",
+  "sistema",
+  "encontro",
+]);
+
+export const statusOferta = pgEnum("offer_status", [
+  "pendente",
+  "aceita",
+  "recusada",
+  "substituida",
+]);
+
+export const statusTransacao = pgEnum("transaction_status", ["combinado"]);
+
+export const conversations = pgTable(
+  "conversations",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    listingId: uuid("listing_id")
+      .notNull()
+      .references(() => listings.id, { onDelete: "cascade" }),
+    buyerId: uuid("buyer_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => [unique().on(t.listingId, t.buyerId)],
+);
+
+export const offers = pgTable("offers", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  conversationId: uuid("conversation_id")
+    .notNull()
+    .references(() => conversations.id, { onDelete: "cascade" }),
+  proposedBy: uuid("proposed_by")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  amountCents: integer("amount_cents").notNull(),
+  status: statusOferta("status").notNull().default("pendente"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  respondedAt: timestamp("responded_at", { withTimezone: true }),
+});
+
+export const messages = pgTable("messages", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  conversationId: uuid("conversation_id")
+    .notNull()
+    .references(() => conversations.id, { onDelete: "cascade" }),
+  senderId: uuid("sender_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  type: tipoMensagem("type").notNull().default("texto"),
+  content: text("content").notNull(),
+  offerId: uuid("offer_id").references(() => offers.id, {
+    onDelete: "set null",
+  }),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+// Toda oferta aceita gera transação — preparado pro escrow da v2.
+export const transactions = pgTable("transactions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  listingId: uuid("listing_id")
+    .notNull()
+    .references(() => listings.id, { onDelete: "cascade" }),
+  buyerId: uuid("buyer_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  sellerId: uuid("seller_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  offerId: uuid("offer_id").references(() => offers.id, {
+    onDelete: "set null",
+  }),
+  agreedPriceCents: integer("agreed_price_cents").notNull(),
+  status: statusTransacao("status").notNull().default("combinado"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export const meetups = pgTable("meetups", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  conversationId: uuid("conversation_id")
+    .notNull()
+    .references(() => conversations.id, { onDelete: "cascade" }),
+  proposedBy: uuid("proposed_by")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  whenText: text("when_text").notNull(),
+  place: text("place").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });
 
 export const refreshTokens = pgTable("refresh_tokens", {

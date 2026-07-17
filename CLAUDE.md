@@ -40,12 +40,12 @@ cd app && npx tsc --noEmit   # typecheck do app
 
 ## Onde paramos (2026-07-17)
 
-Fases 0, 1 e 2 **concluídas e validadas no iPhone** (2026-07-17): identidade (OTP + JWT),
-anúncios com fotos no R2 (bucket `fechou-fotos`, upload por URL assinada), feed por
-proximidade, busca com filtros, status Disponível/Reservado/Vendido.
+Fases 0, 1 e 2 **concluídas e validadas no iPhone**; Fase 3 (Negociação) **código pronto e
+testado na produção** (2026-07-17): chat WebSocket, ofertas com "Fechou!"/recusar/contrapropor,
+transaction + Reservado automáticos, encontro no chat.
 API: https://fechou-api-production-e265.up.railway.app (projeto Railway `fechou`).
 **Importante:** Alan não roda infra local — API, Postgres e R2 são os ambientes reais; o app aponta pra lá por padrão.
 **Atenção:** Resend em modo teste — OTP só chega no e-mail alanvitoraraujo2a@gmail.com;
-outros e-mails dão erro 500 até verificar um domínio no Resend.
-Próximo passo de código: **Fase 3 — Negociação** (chat WebSocket, oferta estruturada com botão
-"Fechou!", transactions, agendamento). Detalhes no ROADMAP.
+outros e-mails dão erro 500 até verificar um domínio no Resend. Pra segunda conta nos testes
+do Alan (Android), gerar o código direto no banco (hash sha256 em `otp_codes`).
+**Pendente:** Alan validar a Fase 3 (venda completa entre iPhone e Android, do anúncio ao "Fechou!").

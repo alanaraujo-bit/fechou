@@ -57,6 +57,23 @@ export default function AnuncioScreen() {
   }, [carregar]);
 
   const souDono = usuario !== null && anuncio !== null && usuario.id === anuncio.vendedor.id;
+  const [abrindoConversa, setAbrindoConversa] = useState(false);
+
+  async function abrirConversa() {
+    if (!anuncio) return;
+    setAbrindoConversa(true);
+    try {
+      const conversa = await chamarComToken<{ id: string }>('/conversas', {
+        method: 'POST',
+        body: JSON.stringify({ anuncioId: anuncio.id }),
+      });
+      router.push({ pathname: '/conversa/[id]', params: { id: conversa.id } });
+    } catch (e) {
+      Alert.alert('Não deu certo', e instanceof Error ? e.message : String(e));
+    } finally {
+      setAbrindoConversa(false);
+    }
+  }
 
   async function mudarStatus(status: StatusAnuncio) {
     if (!anuncio || status === anuncio.status) return;
@@ -185,9 +202,20 @@ export default function AnuncioScreen() {
                 <ThemedText style={styles.excluir}>Excluir anúncio</ThemedText>
               </Pressable>
             </View>
+          ) : usuario ? (
+            <Pressable
+              style={[styles.chamarChat, { backgroundColor: cores.tint }]}
+              onPress={abrirConversa}
+              disabled={abrindoConversa}>
+              <ThemedText
+                type="defaultSemiBold"
+                style={colorScheme === 'dark' ? styles.chamarChatTextoDark : styles.chamarChatTexto}>
+                {abrindoConversa ? 'Abrindo…' : '💬 Chamar no chat'}
+              </ThemedText>
+            </Pressable>
           ) : (
             <ThemedText style={styles.hint}>
-              💬 O chat com o vendedor chega na Fase 3 — aguenta firme!
+              Entre na sua conta (aba Perfil) pra chamar o vendedor no chat.
             </ThemedText>
           )}
         </View>
@@ -225,4 +253,7 @@ const styles = StyleSheet.create({
   chipAtivoTexto: { fontSize: 14, color: '#fff' },
   chipAtivoTextoDark: { fontSize: 14, color: '#151718' },
   excluir: { color: '#d9534f', marginTop: 12 },
+  chamarChat: { borderRadius: 10, paddingVertical: 14, alignItems: 'center', marginTop: 16 },
+  chamarChatTexto: { color: '#fff' },
+  chamarChatTextoDark: { color: '#151718' },
 });
