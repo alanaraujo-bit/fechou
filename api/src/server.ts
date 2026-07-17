@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import pluginAuth from "./plugins/auth.js";
+import rotasAnuncios from "./routes/anuncios.js";
 import rotasAuth from "./routes/auth.js";
 import rotasPerfil from "./routes/perfil.js";
 
@@ -8,13 +9,14 @@ const app = Fastify({ logger: true });
 app.get("/health", async () => ({
   status: "ok",
   service: "fechou-api",
-  version: "0.2.0",
+  version: "0.3.0",
   timestamp: new Date().toISOString(),
 }));
 
 await app.register(pluginAuth);
 await app.register(rotasAuth);
 await app.register(rotasPerfil);
+await app.register(rotasAnuncios);
 
 const port = Number(process.env.PORT ?? 3333);
 

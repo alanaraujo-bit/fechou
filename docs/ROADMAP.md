@@ -27,12 +27,18 @@ quando o critério foi cumprido de verdade no celular, não mockado.
 
 **Critério:** Alan cria a própria conta real e permanece logado após fechar o app. ← **✅ validado em 2026-07-17**
 
-## Fase 2 — Anúncios
-- CRUD de anúncio: fotos (upload pro R2), título, preço, categoria, condição, localização aproximada.
-- Feed por proximidade + busca com filtros (categoria, preço, distância, condição).
-- Status do anúncio: **Disponível / Reservado / Vendido** (Vendido arquiva sozinho).
+## Fase 2 — Anúncios 🚧 (código pronto e testado na Railway em 2026-07-17; falta validação do Alan no iPhone)
+- [x] CRUD de anúncio: fotos (upload direto pro R2 via URL assinada — bucket `fechou-fotos`, privado,
+      leitura via URL assinada de 24h), título, preço, categoria, condição, localização aproximada
+      (lat/lng arredondados pra ~1 km no app; nunca o endereço exato).
+- [x] Feed por proximidade (Haversine em SQL) + busca com filtros (texto, categoria, preço, distância, condição).
+- [x] Status do anúncio: **Disponível / Reservado / Vendido** — dono troca na tela de detalhe;
+      Vendido some do feed e da busca automaticamente.
+- [x] Testado de ponta a ponta na produção: upload real pro R2, feed com distância (1,5 km ✓), filtros ✓.
+- Rotas: `POST /anuncios/fotos/url-upload`, `POST/GET /anuncios`, `GET /anuncios/meus`,
+  `GET/PATCH/DELETE /anuncios/:id`. Telas: Anunciar, Início (feed), Buscar, detalhe (`/anuncio/[id]`).
 
-**Critério:** Alan anuncia um item de verdade pelo celular e o encontra pela busca com filtro de distância.
+**Critério:** Alan anuncia um item de verdade pelo celular e o encontra pela busca com filtro de distância. ← **pendente, próximo passo**
 
 ## Fase 3 — Negociação
 - Chat em tempo real (WebSocket) entre comprador e vendedor por anúncio.

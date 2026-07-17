@@ -40,10 +40,11 @@ cd app && npx tsc --noEmit   # typecheck do app
 
 ## Onde paramos (2026-07-17)
 
-Fases 0 e 1 **concluídas e validadas no iPhone** (2026-07-17): OTP por e-mail, perfil,
-JWT + refresh com rotação, Postgres (Drizzle) na Railway, app com sessão persistente.
+Fases 0 e 1 **concluídas e validadas no iPhone**; Fase 2 (Anúncios) **código pronto e testado
+na produção** (2026-07-17): fotos no R2 (bucket `fechou-fotos`, upload por URL assinada),
+feed por proximidade, busca com filtros, status Disponível/Reservado/Vendido.
 API: https://fechou-api-production-e265.up.railway.app (projeto Railway `fechou`).
-**Importante:** Alan não roda infra local — API e banco ficam na Railway; o app aponta pra lá por padrão.
-**Pendente (não bloqueia):** configurar `RESEND_API_KEY` pro OTP chegar por e-mail de verdade
-(sem ela o código sai nos logs: `railway logs --service fechou-api`).
-Próximo passo de código: **Fase 2 — Anúncios** (CRUD com fotos no R2, feed por proximidade, busca). Detalhes no ROADMAP.
+**Importante:** Alan não roda infra local — API, Postgres e R2 são os ambientes reais; o app aponta pra lá por padrão.
+**Atenção:** Resend em modo teste — OTP só chega no e-mail alanvitoraraujo2a@gmail.com;
+outros e-mails dão erro 500 até verificar um domínio no Resend.
+**Pendente:** Alan validar a Fase 2 no iPhone (anunciar item real e achar na busca por distância).

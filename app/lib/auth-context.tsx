@@ -59,6 +59,8 @@ type AuthContextType = {
   verificarCodigo: (email: string, codigo: string) => Promise<void>;
   atualizarPerfil: (dados: { nome?: string; cidade?: string }) => Promise<void>;
   sair: () => Promise<void>;
+  /** Chama a API com o token da sessão (pra rotas autenticadas). */
+  chamarComToken: <T>(caminho: string, init?: RequestInit) => Promise<T>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -133,6 +135,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [accessToken],
   );
 
+  const chamarComToken = useCallback(
+    async <T,>(caminho: string, init?: RequestInit): Promise<T> => {
+      if (!accessToken) throw new Error('Entre na sua conta primeiro (aba Perfil)');
+      return chamarApi<T>(caminho, { ...init, accessToken });
+    },
+    [accessToken],
+  );
+
   const sair = useCallback(async () => {
     const refreshToken = await SecureStore.getItemAsync(CHAVE_REFRESH);
     if (refreshToken) {
@@ -154,8 +164,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       verificarCodigo,
       atualizarPerfil,
       sair,
+      chamarComToken,
     }),
-    [usuario, carregando, solicitarCodigo, verificarCodigo, atualizarPerfil, sair],
+    [usuario, carregando, solicitarCodigo, verificarCodigo, atualizarPerfil, sair, chamarComToken],
   );
 
   return <AuthContext.Provider value={valor}>{children}</AuthContext.Provider>;
