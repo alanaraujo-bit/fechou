@@ -32,8 +32,12 @@ export async function enviarCodigoOtp(
   });
 
   if (!resposta.ok) {
+    // Não trava o login se o provedor recusar (ex.: Resend em modo teste):
+    // o código fica nos logs e o fluxo segue.
     const corpo = await resposta.text();
-    log.error({ status: resposta.status, corpo }, "falha ao enviar e-mail de OTP");
-    throw new Error("Falha ao enviar o e-mail com o código");
+    log.warn(
+      { status: resposta.status, corpo, email, codigo },
+      "e-mail de OTP não enviado — código disponível no log",
+    );
   }
 }
